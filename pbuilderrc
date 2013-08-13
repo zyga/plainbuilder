@@ -1,0 +1,11 @@
+# Allow using untrusted packages.
+# This can be avoided by properly taking account of all the signing keys used
+# by our PPA. One of the hooks just 'echo's the additional lines to
+# /etc/apt/sources.list and this is a quick way to get this to work.
+ALLOWUNTRUSTED="yes"
+
+# Enable universe in addition to precise
+COMPONENTS="main universe"
+
+# Build everything for precise
+DISTRIBUTION="precise"

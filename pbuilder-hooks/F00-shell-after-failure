@@ -1,0 +1,4 @@
+#!/bin/sh
+# Hook to execute a bash shell after build failure
+echo "Executing hook, let's see..."
+exec /bin/bash -i

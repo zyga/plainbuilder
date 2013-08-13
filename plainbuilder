@@ -1,0 +1,3 @@
+#!/bin/sh
+PLAINBUILDER="@PREFIX@/share/plainbuilder"
+exec pbuilder $@ --configfile "$PLAINBUILDER/pbuilderrc" --hookdir "$PLAINBUILDER/pbuilder-hooks"

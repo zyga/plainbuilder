@@ -1,0 +1,3 @@
+#!/bin/sh
+echo 'deb http://ppa.launchpad.net/checkbox-dev/ppa/ubuntu precise main' >> /etc/apt/sources.list
+
