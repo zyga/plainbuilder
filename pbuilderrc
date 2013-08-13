@@ -6,6 +6,3 @@ ALLOWUNTRUSTED="yes"
 
 # Enable universe in addition to precise
 COMPONENTS="main universe"
-
-# Build everything for precise
-DISTRIBUTION="precise"

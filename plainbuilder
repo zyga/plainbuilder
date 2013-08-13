@@ -1,3 +1,56 @@
 #!/bin/sh
-PLAINBUILDER="@PREFIX@/share/plainbuilder"
-exec pbuilder $@ --configfile "$PLAINBUILDER/pbuilderrc" --hookdir "$PLAINBUILDER/pbuilder-hooks"
+_pb_share="@PREFIX@/share/plainbuilder"
+_pb_cache=${XDG_CACHE_HOME:-$HOME/.cache}/plainbuilder
+_pb_config=${XDG_CONFIG_HOME:-$HOME/.config}/plainbuilder
+
+pb_is_image_ready() {
+    test -e "$_pb_cache/images/precise.tgz"
+}
+
+pb_create() {
+    set -x
+    mkdir -p "$_pb_cache/images/"
+    exec sudo pbuilder \
+        --create \
+        --configfile "$_pb_share/pbuilderrc" \
+        --hookdir "$_pb_share/pbuilder-hooks" \
+        --distribution precise \
+        --basetgz "$_pb_cache/images/precise.tgz"
+}
+
+pb_build() {
+    set -x
+    exec sudo pbuilder \
+        --build \
+        --configfile "$_pb_share/pbuilderrc" \
+        --hookdir "$_pb_share/pbuilder-hooks" \
+        --distribution precise \
+        --basetgz "$_pb_cache/images/precise.tgz" \
+        "$1"
+}
+
+pb_main() {
+    case "$1" in
+        create)
+            pb_create
+            ;;
+        build)
+            if [ "$2" = "" ]; then
+                echo "Usage: plainbuilder build DSC_FILE"
+                echo "You didn't specify the DSC_FILE to build"
+                exit 1
+            fi
+            if ! pb_is_image_ready; then
+                pb_create
+            fi
+            pb_build "$2"
+            ;;
+        -h|--help|--help)
+            echo "Usage: plainbuilder create"
+            echo "       plainbuilder build DSC_FILE"
+            ;;
+    esac
+}
+
+
+pb_main "$@"
